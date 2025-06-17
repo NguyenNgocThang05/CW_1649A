@@ -3,29 +3,28 @@ package onlineBookStore;
 public class CustomArrayList<E> {
     // Attributes
     private E[] elements;     // array to store elements
-    private int nextIndex;       // size can also mean index
+    private int nextIndex;
 
     // Constructor
     public CustomArrayList() {
-        elements = (E[]) new Object[5]; // default array storage
-        nextIndex = 0;             // number of data has stored in the index
+        this.elements = (E[]) new Object[5]; // default array storage
+        this.nextIndex = 0;             // number of data has stored in the index
     }
 
     // Methods
     // Method 1: Add element at the end
-    public void add(E value) {
+    public void add(E element) {
         if (nextIndex == elements.length) {
             resize();
         }
-        elements[nextIndex] = value;
+        elements[nextIndex] = element;
         nextIndex++;
     }
 
     // Method 2: Get element at index
     public E get(int index) {
         if (index < 0 || index >= nextIndex) {
-            System.out.println("Index out of bounds");
-            return null;
+            throw new IndexOutOfBoundsException("Index out of bounds");
         }
         return elements[index];
     }
@@ -57,11 +56,10 @@ public class CustomArrayList<E> {
     }
 
     // Method 6: Set element at index
-    public void set(int index, E value) {
+    public void set(int index, E element) {
         if (index < 0 || index >= nextIndex) {
-            System.out.println("Index out of bounds");
-            return;
+            throw new IndexOutOfBoundsException("Index out of bounds");
         }
-        elements[index] = value;
+        elements[index] = element;
     }
 }
