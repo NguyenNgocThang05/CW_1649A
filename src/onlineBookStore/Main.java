@@ -241,3 +241,5 @@ public class Main {
         }
     }
 }
+
+// Case 4 bug: Fix the bug where the user enter something other than numbers, the program will let the user try again
