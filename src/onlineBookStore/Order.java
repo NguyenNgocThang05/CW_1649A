@@ -15,7 +15,7 @@ public class Order {
         setCustomer(customer);
     }
 
-    // Methods
+    // Setters and Getters
     public void setOrderID() {
         this.orderID = nextOrderID++; // auto-increment ID
     }
@@ -43,6 +43,7 @@ public class Order {
         return status;
     }
 
+    // Total calculation method
     public double calculateTotal() {
         double total = 0.0;
         for (int i = 0; i < books.size(); i++) {

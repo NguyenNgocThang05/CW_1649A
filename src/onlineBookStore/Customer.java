@@ -11,7 +11,7 @@ public class Customer{
         setAddress(address);
     }
 
-    // Methods
+    // Setters and Getters
     public void setName(String name) {
         this.name = name;
     }

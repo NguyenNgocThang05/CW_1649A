@@ -17,7 +17,7 @@ public class Book {
         this.quantity = 0;
     }
 
-    // Methods
+    // Setters and Getters
     public void setTitle(String title) {
         this.title = title;
     }
