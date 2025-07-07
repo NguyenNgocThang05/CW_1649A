@@ -6,9 +6,10 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Initialize lists for available books and all orders
+        // Create lists for available books
         CustomArrayList<Book> availableBooks = new CustomArrayList<>();
-        CustomArrayList<Order> allOrders = new CustomArrayList<>();
+        // Create a queue for all unfinish orders
+        LinkedQueueADT<Order> allOrders = new LinkedQueueADT<>();
 
         // Add sample books to the availableBooks list
         availableBooks.add(new Book("The Great Gatsby", "F. Scott Fitzgerald", 20.99, 3));
@@ -42,7 +43,7 @@ public class Main {
                     displayOrderStatus(allOrders);
                     break;
                 case "4":
-                    completeOrder(scanner, allOrders);
+                    completeOrder(allOrders);
                     break;
                 case "5":
                     System.out.println("Goodbye!");
@@ -55,7 +56,7 @@ public class Main {
     }
 
     // Method to handle book ordering
-    private static void orderBook(Scanner scanner, CustomArrayList<Book> availableBooks, CustomArrayList<Order> allOrders) {
+    private static void orderBook(Scanner scanner, CustomArrayList<Book> availableBooks, LinkedQueueADT<Order> allOrders) {
         // Prompt for customer name
         System.out.print("Enter your name (or press enter to cancel): ");
         String name = scanner.nextLine();
@@ -98,7 +99,7 @@ public class Main {
                     // Sort selected books and create the order
                     Sorting.insertionSort(selectedBooks);
                     Order finalOrder = new Order(newCustomer, selectedBooks);
-                    allOrders.add(finalOrder);
+                    allOrders.offer(finalOrder); // Add to the queue using offer
 
                     // Display the final order summary
                     System.out.println("\nFinal Order:");
@@ -148,9 +149,9 @@ public class Main {
     }
 
     // Method to search and display an order by its ID
-    private static void searchOrder(Scanner scanner, CustomArrayList<Order> allOrders) {
-        if (allOrders.size() == 0) {
-            System.out.println("There are no orders currently");
+    private static void searchOrder(Scanner scanner, LinkedQueueADT<Order> allOrders) {
+        if (allOrders.isEmpty()) { // Use isEmpty() for the queue
+            System.out.println("There are no orders currently.");
             return;
         }
 
@@ -167,16 +168,23 @@ public class Main {
                 int targetOrderId = Integer.parseInt(input);
                 boolean found = false;
 
-                // Search for the order with matching ID
-                for (int i = 0; i < allOrders.size(); i++) {
-                    Order order = allOrders.get(i);
+                // Create a temporary queue to iterate and search
+                LinkedQueueADT<Order> tempQueue = new LinkedQueueADT<>();
+                while (!allOrders.isEmpty()) {
+                    Order order = allOrders.poll(); // Dequeue from original
                     if (order.getOrderID() == targetOrderId) {
                         System.out.println("Order found:");
                         System.out.println(order);
                         found = true;
-                        break;
                     }
+                    tempQueue.offer(order); // Enqueue to temporary
                 }
+
+                // Restore original queue from temporary queue
+                while (!tempQueue.isEmpty()) {
+                    allOrders.offer(tempQueue.poll());
+                }
+
 
                 if (!found) {
                     System.out.println("Order with ID " + targetOrderId + " not found.");
@@ -190,56 +198,54 @@ public class Main {
     }
 
     // Method to display the current status of all orders
-    private static void displayOrderStatus(CustomArrayList<Order> allOrders) {
-        if (allOrders.size() == 0) {
+    private static void displayOrderStatus(LinkedQueueADT<Order> allOrders) {
+        if (allOrders.isEmpty()) { // Use isEmpty() for the queue
             System.out.println("No orders placed yet.");
             return;
         }
 
         System.out.println("\nOrder Status:");
-        for (int i = 0; i < allOrders.size(); i++) {
-            Order order = allOrders.get(i);
+        // Create a temporary queue to display elements without removing them from original
+        LinkedQueueADT<Order> tempQueue = new LinkedQueueADT<>();
+        while (!allOrders.isEmpty()) {
+            Order order = allOrders.poll();
             System.out.println("Order ID: " + order.getOrderID() +
                     ", Customer: " + order.getCustomer().getName() +
                     ", Status: " + order.getStatus());
+            tempQueue.offer(order);
+        }
+        // Restore original queue from temporary queue
+        while (!tempQueue.isEmpty()) {
+            allOrders.offer(tempQueue.poll());
         }
     }
 
-    // Method to mark an order as completed
-    private static void completeOrder(Scanner scanner, CustomArrayList<Order> allOrders) {
-        if (allOrders.size() == 0) {
+    // Method to mark an order as completed (FIFO)
+    private static void completeOrder(LinkedQueueADT<Order> allOrders) {
+        if (allOrders.isEmpty()) { // Use isEmpty() for the queue
             System.out.println("No orders to complete.");
             return;
         }
 
-        System.out.print("Enter the Order ID to complete: ");
+        // Apply FIFO: Complete the oldest order (the one at the front of the queue)
+        System.out.println("Completing the oldest order..");
         try {
-            int completeOrderId = Integer.parseInt(scanner.nextLine());
-            boolean found = false;
+            Order orderToComplete = allOrders.peek(); // Peek to show, then poll to remove
+            System.out.println("Attempting to complete Order ID: " + orderToComplete.getOrderID());
 
-            for (int i = 0; i < allOrders.size(); i++) {
-                Order order = allOrders.get(i);
-
-                if (order.getOrderID() == completeOrderId) {
-                    found = true;
-                    if (order.getStatus().equals("Completed")) {
-                        System.out.println("The order is already completed.");
-                    } else {
-                        order.setStatus("Completed");
-                        System.out.println("Order ID: " + completeOrderId + " completed");
-                    }
-                    break;
-                }
+            if (orderToComplete.getStatus().equals("Shipping..")) {
+                System.out.println("The oldest order (ID: " + orderToComplete.getOrderID() + ") is already shipping.");
+                // If it's already shipping, we don't remove it from the queue using poll,
+                // but for a true FIFO "completion," you might want to consider it processed
+                // and remove it, or have a separate "shipped" queue. For this scenario,
+                // we'll keep it in the queue if already shipped.
+            } else {
+                orderToComplete.setStatus("Shipping..");
+                System.out.println("Order ID: " + orderToComplete.getOrderID() + " completed and set to 'Shipping..'");
+                allOrders.poll(); // Remove the completed order from the queue
             }
-
-            if (!found) {
-                System.out.println("Order ID not found.");
-            }
-
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a valid number");
+        } catch (IllegalStateException e) {
+            System.out.println("Error completing order: " + e.getMessage());
         }
     }
 }
-
-// Case 4 bug: Fix the bug where the user enter something other than numbers, the program will let the user try again

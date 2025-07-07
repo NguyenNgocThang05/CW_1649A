@@ -1,25 +1,22 @@
-package onlineBookStore;
+package onlineBookStore_backup;
 
 public class LinkedQueueADT<E> {
     private class Node<E> {
         // Data
-        private E element; // The actual element stored in the node
+        private E element;
         private Node<E> next;
 
         // Constructor
-        public Node ( E element) {
+        public Node (E element) {
             this.element = element;
             this.next = null;
         }
     }
 
-    // Reference to the first node in the queue
     private Node<E> head;
 
-    // Reference to the last node in the queue
     private Node<E> tail;
 
-    // The current number of the elements in the queue
     private int size;
 
     // Constructor
@@ -29,8 +26,7 @@ public class LinkedQueueADT<E> {
         this.size = 0;
     }
 
-    // Add an element to the end of the queue
-    public void offer(E element) {
+    public void offer (E element) {
         Node<E> newNode = new Node<>(element);
 
         if (this.head == null && this.tail == null) {
@@ -40,45 +36,64 @@ public class LinkedQueueADT<E> {
             this.tail.next = newNode;
             this.tail = newNode;
         }
+
         this.size++;
     }
 
-    // Remove and return the first element from the queue
     public E poll() {
-        if (this.head == null) { // Simplified condition: if head is null, queue is empty
+        if (this.head == null && this.tail == null) {
             throw new IllegalStateException("Queue is empty");
         }
 
         E oldElement = this.head.element;
         Node<E> tempNode = this.head;
         this.head = this.head.next;
-        tempNode.next = null; // Detach the old head node
 
-        // If head becomes null after polling, it means the queue is now empty
-        // so tail should also be null
         if (this.head == null) {
             this.tail = null;
         }
+
+        tempNode.next = null;
 
         this.size--;
         return oldElement;
     }
 
-    // Return the first element without removing it
     public E peek() {
-        if (this.head == null) { // Simplified condition
+        if (this.head == null && this.tail == null) {
             throw new IllegalStateException("Queue is empty");
         }
+
         return this.head.element;
     }
 
-    // Return the current number of elements in the queue
     public int size() {
         return this.size;
     }
 
-    // Return true if empty, false otherwise
     public boolean isEmpty() {
-        return this.head == null; // Simplified condition
+        if (this.head == null && this.tail == null) {
+            return true;
+        }
+
+        return false;
     }
+
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("[");
+        Node<E> tempNode = this.head;
+
+        while (tempNode != null) {
+            result.append(tempNode.element);
+            if (tempNode.next != null) {
+                result.append(", ");
+            }
+            tempNode = tempNode.next;
+        }
+
+        result.append("]");
+        return result.toString();
+    }
+
 }

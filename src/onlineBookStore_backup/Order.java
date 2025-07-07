@@ -1,38 +1,42 @@
-package onlineBookStore;
+package onlineBookStore_backup;
 
 public class Order {
     // Attributes
     private int orderID;
     private static int nextOrderID = 1;
-    private CustomArrayList<Book> books;
+    private ArrayListADT<Book> books;
     private Customer customer;
     private String status = "Pending..";
 
     // Constructor
-    public Order(Customer customer, CustomArrayList<Book> books) {
-        setOrderID();
-        setBooks(books);
-        setCustomer(customer);
+    public Order (Customer customer, ArrayListADT<Book> books) {
+        this.orderID = nextOrderID++;
+        this.books = books;
+        this.customer = customer;
     }
 
     // Setters and Getters
     public void setOrderID() {
-        this.orderID = nextOrderID++; // auto-increment ID
+        this.orderID = nextOrderID++;
     }
 
     public int getOrderID() {
-        return  orderID;
+        return this.orderID;
     }
 
-    public void setBooks(CustomArrayList<Book> books) {
+    public void setBooks(ArrayListADT<Book> books) {
         this.books = books;
+    }
+    public ArrayListADT<Book> getBooks() {
+        return this.books;
     }
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
     public Customer getCustomer() {
-        return customer;
+        return this.customer;
     }
 
     public void setStatus(String status) {
@@ -40,16 +44,16 @@ public class Order {
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
-    // Total calculation method
     public double calculateTotal() {
         double total = 0.0;
         for (int i = 0; i < books.size(); i++) {
-            Book book = books.get(i);
-            total += book.getPrice() * book.getQuantity();
+            Book totalBooks = books.get(i);
+            total += totalBooks.getPrice() * totalBooks.getQuantity();
         }
+
         return total;
     }
 
