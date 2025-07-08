@@ -1,4 +1,8 @@
-package onlineBookStore_backup;
+package onlineBookStore_backup.Helper_Functions;
+
+import onlineBookStore_backup.ADT.ArrayListADT;
+import onlineBookStore_backup.Algorithm.Sorting;
+import onlineBookStore_backup.Model.Book;
 
 public class Book_Library {
     private ArrayListADT<Book> books;
@@ -17,7 +21,9 @@ public class Book_Library {
         if (books.isEmpty()) {
             System.out.println("No books available");
         } else {
-            System.out.println("Current available books:\n");
+            Sorting.insertionSort(books);
+
+            System.out.println("Available books:\n");
             for (int i = 0; i < books.size(); i++) {
                 Book book = books.get(i);
                 System.out.println((i + 1) + ". " + book);

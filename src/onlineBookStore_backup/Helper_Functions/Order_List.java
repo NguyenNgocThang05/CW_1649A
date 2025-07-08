@@ -1,4 +1,7 @@
-package onlineBookStore_backup;
+package onlineBookStore_backup.Helper_Functions;
+
+import onlineBookStore_backup.ADT.LinkedQueueADT;
+import onlineBookStore_backup.Model.Order;
 
 public class Order_List {
     private LinkedQueueADT<Order> order_list; // This queue will store all pending orders
@@ -112,7 +115,7 @@ public class Order_List {
        System.out.println("--------------------------");
    }
 
-   public LinkedQueueADT<Order> getPendingOrderQueue() {
+   public LinkedQueueADT<Order> getPendingOrdersQueue() {
         return this.order_list;
    }
 

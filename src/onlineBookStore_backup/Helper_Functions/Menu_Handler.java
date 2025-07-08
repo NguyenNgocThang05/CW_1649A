@@ -1,19 +1,16 @@
-package onlineBookStore_backup;
+package onlineBookStore_backup.Helper_Functions;
+
+import onlineBookStore_backup.ADT.ArrayListADT;
+import onlineBookStore_backup.ADT.LinkedStackADT;
+import onlineBookStore_backup.Model.Book;
+import onlineBookStore_backup.Model.Customer;
+import onlineBookStore_backup.Model.Order;
+import onlineBookStore_backup.Algorithm.Search;
 
 import java.util.Scanner; // Import Scanner for user input
 
-public class Menu_Handler { // Changed name from Menu_Handler to Menu_Controller
-    /**
-     * Handles the process of a customer ordering books.
-     * Allows the customer to select multiple books and specify quantities.
-     * Creates a new Order and adds it to the list of pending orders.
-     *
-     * @param scanner The Scanner object for user input.
-     * @param availableBooks The Book_Library instance containing available books.
-     * @param allOrders The Order_List instance to manage orders.
-     */
+public class Menu_Handler {
     public void handleOrderBook(Scanner scanner, Book_Library availableBooks, Order_List allOrders) {
-        System.out.println("\n--- Order Book ---");
         availableBooks.list_all();
 
         if (availableBooks.getBookCount() == 0) {
@@ -121,19 +118,11 @@ public class Menu_Handler { // Changed name from Menu_Handler to Menu_Controller
         System.out.println(newOrder.toString());
     }
 
-    /**
-     * Handles searching for a specific order by its ID.
-     * Now delegates the search logic to the separate Search class.
-     *
-     * @param scanner The Scanner object for user input.
-     * @param allOrders The Order_List instance to search within.
-     * @param viewedOrderHistory The stack to push found orders onto for history.
-     */
+
     public void handleSearchOrderDetail(Scanner scanner, Order_List allOrders, LinkedStackADT<Order> viewedOrderHistory) {
-        System.out.println("\n--- Search Order Detail ---");
 
         // Check if there are any orders in the system
-        if (allOrders.getPendingOrderQueue().isEmpty() && allOrders.getFinishedOrdersQueue().isEmpty()) {
+        if (allOrders.getPendingOrdersQueue().isEmpty() && allOrders.getFinishedOrdersQueue().isEmpty()) {
             System.out.println("No orders to search yet.");
             return;
         }
@@ -153,39 +142,43 @@ public class Menu_Handler { // Changed name from Menu_Handler to Menu_Controller
         if (foundOrder != null) {
             System.out.println("\nOrder Found:");
             System.out.println(foundOrder.toString());
+
+            if (viewedOrderHistory.size() >= 5) {
+                LinkedStackADT<Order> temp = new LinkedStackADT<>();
+
+                while (!viewedOrderHistory.isEmpty()) {
+                    temp.push(viewedOrderHistory.pop());;
+                }
+
+                if (!temp.isEmpty()) {
+                    temp.pop();
+                }
+
+                while (!temp.isEmpty()) {
+                    viewedOrderHistory.push(temp.pop());
+                }
+            }
+
             viewedOrderHistory.push(foundOrder);
+
             System.out.println("\nOrder added to your search history.");
         } else {
             System.out.println("Order with ID " + searchOrderID + " not found.");
         }
     }
 
-    /**
-     * Displays the current status of all pending and finished orders.
-     *
-     * @param allOrders The Order_List instance to display status from.
-     */
+
     public void handleDisplayOrderStatus(Order_List allOrders) {
         allOrders.showOrderStatus();
     }
 
-    /**
-     * Completes the oldest pending order (moves it from pending to finished).
-     *
-     * @param allOrders The Order_List instance to manage order completion.
-     */
+
     public void handleCompleteOrder(Order_List allOrders) {
         System.out.println("\n--- Complete An Order ---");
         allOrders.finishOrder();
     }
 
-    /**
-     * Handles viewing the history of recently searched orders using a stack.
-     * Displays orders from most recent to oldest.
-     *
-     * @param scanner The Scanner object for user input.
-     * @param historyStack The stack containing recently viewed orders.
-     */
+
     public void handleViewOrderHistory(Scanner scanner, LinkedStackADT<Order> historyStack) {
         System.out.println("\n--- Recently Searched Order History ---");
         if (historyStack.isEmpty()) {
@@ -193,19 +186,24 @@ public class Menu_Handler { // Changed name from Menu_Handler to Menu_Controller
             return;
         }
 
-        while(!historyStack.isEmpty()) {
-            Order historyOrder = historyStack.pop();
-            System.out.println("\n--- Order from History ---");
-            System.out.println(historyOrder.toString());
+        ArrayListADT<Order> orderList = new ArrayListADT<>();
 
-            if (!historyStack.isEmpty()) {
-                System.out.print("\nPress Enter to view previous order, or type 'exit' to return to main menu: ");
-                String input = scanner.nextLine().trim().toLowerCase();
-                if (input.equals("exit")) {
-                    break;
-                }
-            }
+        while (!historyStack.isEmpty()) {
+            orderList.add(historyStack.pop());
         }
-        System.out.println("\n--- End of History ---");
+
+        int count = 0;
+        for (int i = orderList.size() - 1; i >= 0; i--) {
+            if (count == 5) {
+                break;
+            }
+            System.out.println(orderList.get(i).toString() + "\n");
+            count++;
+        }
+
+        for (int i = orderList.size() - 1; i >= 0; i--) {
+            historyStack.push(orderList.get(i));
+        }
+
     }
 }

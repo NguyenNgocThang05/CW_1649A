@@ -1,4 +1,4 @@
-package onlineBookStore_backup;
+package onlineBookStore_backup.Model;
 
 public class Book {
     // Attributes

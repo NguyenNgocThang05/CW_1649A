@@ -1,11 +1,15 @@
-package onlineBookStore_backup;
+package onlineBookStore_backup.Algorithm;
+
+import onlineBookStore_backup.ADT.LinkedQueueADT;
+import onlineBookStore_backup.Helper_Functions.Order_List;
+import onlineBookStore_backup.Model.Order;
 
 public class Search {
     public static Order searchOrderById(Order_List allOrders, int searchOrderID) {
         Order foundOrder = null;
 
         LinkedQueueADT<Order> tempPendingQueue = new LinkedQueueADT<>();
-        LinkedQueueADT<Order> pendingOrders = allOrders.getPendingOrderQueue();
+        LinkedQueueADT<Order> pendingOrders = allOrders.getPendingOrdersQueue();
 
         int pendingSize = pendingOrders.size();
 

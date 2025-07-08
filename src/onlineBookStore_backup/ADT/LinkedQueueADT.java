@@ -1,8 +1,8 @@
-package onlineBookStore_backup;
+package onlineBookStore_backup.ADT;
 
-public class LinkedStackADT<E> {
+public class LinkedQueueADT<E> {
     private class Node<E> {
-        // Attributes
+        // Data
         private E element;
         private Node<E> next;
 
@@ -13,37 +13,46 @@ public class LinkedStackADT<E> {
         }
     }
 
-    // Attributes
-    private Node<E> top;
+    private Node<E> head;
+
+    private Node<E> tail;
+
     private int size;
 
     // Constructor
-    public LinkedStackADT() {
-        this.top = null;
+    public LinkedQueueADT() {
+        this.head = null;
+        this.tail = null;
         this.size = 0;
     }
 
-    public void push (E element) {
+    public void offer (E element) {
         Node<E> newNode = new Node<>(element);
 
-        if (this.top == null) {
-            this.top = newNode;
+        if (this.head == null && this.tail == null) {
+            this.head = newNode;
+            this.tail = newNode;
         } else {
-            newNode.next = this.top;
-            this.top = newNode;
+            this.tail.next = newNode;
+            this.tail = newNode;
         }
 
         this.size++;
     }
 
-    public E pop() {
-        if (this.top == null) {
-            throw new IllegalStateException("Stack is empty");
+    public E poll() {
+        if (this.head == null && this.tail == null) {
+            throw new IllegalStateException("Queue is empty");
         }
 
-        E oldElement = this.top.element;
-        Node<E> tempNode = this.top;
-        this.top = this.top.next;
+        E oldElement = this.head.element;
+        Node<E> tempNode = this.head;
+        this.head = this.head.next;
+
+        if (this.head == null) {
+            this.tail = null;
+        }
+
         tempNode.next = null;
 
         this.size--;
@@ -51,10 +60,11 @@ public class LinkedStackADT<E> {
     }
 
     public E peek() {
-        if (this.top == null) {
-            throw new IllegalStateException("Stack is empty");
+        if (this.head == null && this.tail == null) {
+            throw new IllegalStateException("Queue is empty");
         }
-        return this.top.element;
+
+        return this.head.element;
     }
 
     public int size() {
@@ -62,16 +72,18 @@ public class LinkedStackADT<E> {
     }
 
     public boolean isEmpty() {
-        if (this.size == 0 && this.top == null) {
+        if (this.head == null && this.tail == null) {
             return true;
         }
+
         return false;
     }
 
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("[");
-        Node<E> tempNode = this.top;
+        Node<E> tempNode = this.head;
+
         while (tempNode != null) {
             result.append(tempNode.element);
             if (tempNode.next != null) {
@@ -83,4 +95,5 @@ public class LinkedStackADT<E> {
         result.append("]");
         return result.toString();
     }
+
 }

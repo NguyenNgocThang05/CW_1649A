@@ -1,4 +1,7 @@
-package onlineBookStore_backup;
+package onlineBookStore_backup.Model;
+
+import onlineBookStore_backup.ADT.ArrayListADT;
+import onlineBookStore_backup.Algorithm.Sorting;
 
 public class Order {
     // Attributes
@@ -62,6 +65,7 @@ public class Order {
         orderDetails.append("Order ID: ").append(orderID).append("\n");
         orderDetails.append(customer).append("\nBooks Ordered:\n");
 
+        Sorting.insertionSort(books);
         for (int i = 0; i < books.size(); i++) {
             orderDetails.append("- ").append(books.get(i)).append("\n");
         }

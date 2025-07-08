@@ -1,4 +1,4 @@
-package onlineBookStore_backup;
+package onlineBookStore_backup.ADT;
 
 public class ArrayListADT<E> {
     // Attributes
