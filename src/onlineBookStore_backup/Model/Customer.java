@@ -2,13 +2,13 @@ package onlineBookStore_backup.Model;
 
 public class Customer {
     // Attributes
-    private String name;
-    private String address;
+    private String name; // Declares a private String variable to store customer's name
+    private String address; // Declares a private String variable to store customer's address
 
     // Constructor
     public Customer(String name, String address) {
-        this.name = name;
-        this.address = address;
+        this.name = name; // Initialize the name attribute of Customer object with the provided name
+        this.address = address; // Initialize the name attribute of Customer object with the provided address
     }
 
     // Setters and Getters
