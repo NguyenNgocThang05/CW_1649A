@@ -79,6 +79,6 @@ public class Book {
     }
 
     public String toString() {
-        return toStockString();
+        return toQuantityString();
     }
 }

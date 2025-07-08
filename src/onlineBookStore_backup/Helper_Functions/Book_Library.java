@@ -26,7 +26,7 @@ public class Book_Library {
             System.out.println("Available books:\n");
             for (int i = 0; i < books.size(); i++) {
                 Book book = books.get(i);
-                System.out.println((i + 1) + ". " + book);
+                System.out.println((i + 1) + ". " + book.toStockString());
             }
         }
     }

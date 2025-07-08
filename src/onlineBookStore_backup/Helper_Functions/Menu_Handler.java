@@ -147,7 +147,7 @@ public class Menu_Handler {
                 LinkedStackADT<Order> temp = new LinkedStackADT<>();
 
                 while (!viewedOrderHistory.isEmpty()) {
-                    temp.push(viewedOrderHistory.pop());;
+                    temp.push(viewedOrderHistory.pop());
                 }
 
                 if (!temp.isEmpty()) {
