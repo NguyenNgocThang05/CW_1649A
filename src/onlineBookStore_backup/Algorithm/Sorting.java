@@ -16,7 +16,7 @@ public class Sorting {
             // If the element is greater than the current element, making space for current
             while (j >= 0 && books.get(j).getTitle().compareTo(current.getTitle()) > 0) {
                 books.set(j + 1, books.get(j)); // Shifts the element at index j one position to the right
-                j--; // Decrements j to move move to the next element on the left in the sorted portion
+                j--; // Decrements j to move to the next element on the left in the sorted portion
             }
 
             books.set(j + 1, current); // Inserts the current element into its correct sorted position
