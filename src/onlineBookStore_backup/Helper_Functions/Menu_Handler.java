@@ -115,7 +115,7 @@ public class Menu_Handler {
         allOrders.addOrder(newOrder);
 
         System.out.println("\nOrder placed successfully!");
-        System.out.println(newOrder.toString());
+        System.out.println(newOrder);
     }
 
 

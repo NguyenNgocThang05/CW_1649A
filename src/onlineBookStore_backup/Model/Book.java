@@ -58,9 +58,6 @@ public class Book {
         return this.quantity;
     }
 
-//    public void incrementQuantity() {
-//        this.quantity++;
-//    }
 
     public void decrementStock(int amount) {
         // Checks if there is enough stock to decrement
