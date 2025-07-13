@@ -49,7 +49,7 @@ public class Main {
                     break;
 
                 case "5":
-                    menuHandler.handleViewOrderHistory(scanner, viewedOrderHistory);
+                    menuHandler.handleViewOrderHistory(viewedOrderHistory);
                     break;
 
                 case "6":

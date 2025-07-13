@@ -28,7 +28,7 @@ public class Order_List {
         }
 
         Order finishedOrder = this.pending_orders.poll(); // Removes and return the order at the front of the pending_orders (the oldest pending order)
-        finishedOrder.setStatus("Completed"); // Sets the status of the retrieved order to completed
+        finishedOrder.setStatus("Completed"); // Sets the status of the retrieved order to 'completed'
         this.finished_orders.offer(finishedOrder); // Adds the completed order to the finished_orders queue
        System.out.println("Order " + finishedOrder.getOrderID() + " has been finished.");
    }
