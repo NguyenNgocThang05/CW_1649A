@@ -1,7 +1,7 @@
-package onlineBookStore_backup.Model;
+package onlineBookStore.Model;
 
-import onlineBookStore_backup.ADT.ArrayListADT;
-import onlineBookStore_backup.Algorithm.Sorting;
+import onlineBookStore.ADT.ArrayListADT;
+import onlineBookStore.Algorithm.Sorting;
 
 public class Order {
     // Attributes
@@ -68,7 +68,7 @@ public class Order {
         orderDetails.append("Order ID: ").append(orderID).append("\n"); // Appends the order ID and a new line
         orderDetails.append(customer).append("\nBook(s) Ordered:\n"); // Appends the customer's toString() and "Books Ordered:"
 
-        Sorting.insertionSort(books); // Sorts the books in the arraylist using insertion sort
+        Sorting.insertionSortBook(books); // Sorts the books in the arraylist using insertion sort
         // Loops through the sorted list of books
         for (int i = 0; i < books.size(); i++) {
             orderDetails.append("- ").append(books.get(i)).append("\n"); // Appends each book's toString()

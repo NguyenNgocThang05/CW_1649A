@@ -1,251 +1,65 @@
 package onlineBookStore;
 
+import onlineBookStore.ADT.LinkedStackADT;
+import onlineBookStore.Helper_Functions.Book_Library;
+import onlineBookStore.Helper_Functions.Menu_Handler;
+import onlineBookStore.Helper_Functions.Order_List;
+import onlineBookStore.Model.Order;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Create lists for available books
-        CustomArrayList<Book> availableBooks = new CustomArrayList<>();
-        // Create a queue for all unfinish orders
-        LinkedQueueADT<Order> allOrders = new LinkedQueueADT<>();
+        Book_Library availableBooks = new Book_Library();
+        Order_List allOrders = new Order_List();
+        LinkedStackADT<Order> viewedOrderHistory = new LinkedStackADT<>();
 
-        // Add sample books to the availableBooks list
-        availableBooks.add(new Book("The Great Gatsby", "F. Scott Fitzgerald", 20.99, 3));
-        availableBooks.add(new Book("Ulysses", "James Joyce", 25.99, 4));
-        availableBooks.add(new Book("In Search of Lost Time", "Marcel Proust", 30.99, 5));
-        availableBooks.add(new Book("1984", "George Orwell", 35.99, 6));
-        availableBooks.add(new Book("The Lord of the Rings", "J.R.R. Tolkien", 40.99, 7));
+        Menu_Handler menuHandler = new Menu_Handler();
+        System.out.println("\nWelcome to Online Bookstore");
 
-        // Start main menu loop
         while (true) {
-            // Display menu options
-            System.out.println("\nWelcome to Online Bookstore!");
-            System.out.println("1. Order Book");
-            System.out.println("2. Search order detail");
-            System.out.println("3. Display order status");
-            System.out.println("4. Complete an order");
-            System.out.println("5. Exit");
-            System.out.print("Choose an option (1-5): ");
+            System.out.println("\n1. Order Book");
+            System.out.println("2. Search Order Detail");
+            System.out.println("3. Display Order Status");
+            System.out.println("4. Complete An Order");
+            System.out.println("5. View Search Order History");
+            System.out.println("6. Exit");
+            System.out.print("Choose an option (1-6): ");
 
             String menuChoice = scanner.nextLine();
 
             // Handle user menu selection
             switch (menuChoice) {
                 case "1":
-                    orderBook(scanner, availableBooks, allOrders);
+                    menuHandler.handleOrderBook(scanner, availableBooks, allOrders);
                     break;
+
                 case "2":
-                    searchOrder(scanner, allOrders);
+                    menuHandler.handleSearchOrderDetail(scanner, allOrders, viewedOrderHistory);
                     break;
+
                 case "3":
-                    displayOrderStatus(allOrders);
+                    menuHandler.handleDisplayOrderStatus(allOrders);
                     break;
+
                 case "4":
-                    completeOrder(allOrders);
+                    menuHandler.handleCompleteOrder(allOrders);
                     break;
+
                 case "5":
-                    System.out.println("Goodbye!");
+                    menuHandler.handleViewOrderHistory(viewedOrderHistory);
+                    break;
+
+                case "6":
+                    System.out.println("Exiting..");
                     scanner.close();
-                    return; // Exit program
+                    return;
+
                 default:
-                    System.out.println("Invalid choice. Please enter a number between 1 to 5.");
+                    System.out.println("Invalid choice. Please enter a number between 1 to 6");
             }
-        }
-    }
-
-    // Method to handle book ordering
-    private static void orderBook(Scanner scanner, CustomArrayList<Book> availableBooks, LinkedQueueADT<Order> allOrders) {
-        // Prompt for customer name
-        System.out.print("Enter your name (or press enter to cancel): ");
-        String name = scanner.nextLine();
-        if (name.isBlank()) {
-            System.out.println("Order cancelled.");
-            return;
-        }
-
-        // Prompt for valid address
-        String address;
-        while (true) {
-            System.out.print("Enter your address: ");
-            address = scanner.nextLine();
-            if (!address.isBlank()) break;
-            System.out.println("Address cannot be empty. Try again.");
-        }
-
-        Customer newCustomer = new Customer(name, address);
-
-        // Sort books alphabetically before displaying
-        Sorting.insertionSort(availableBooks);
-
-        // Show all available books
-        System.out.println("\nAvailable books: ");
-        for (int i = 0; i < availableBooks.size(); i++) {
-            System.out.println((i + 1) + ". " + availableBooks.get(i).toStockString());
-        }
-
-        CustomArrayList<Book> selectedBooks = new CustomArrayList<>();
-
-        // Allow the user to pick books in a loop
-        while (true) {
-            System.out.print("\nEnter the number of the book you'd like to pick (or press Enter to finish): ");
-            String input = scanner.nextLine();
-
-            if (input.isBlank()) {
-                if (selectedBooks.size() == 0) {
-                    System.out.println("No books selected. Order cancelled.");
-                } else {
-                    // Sort selected books and create the order
-                    Sorting.insertionSort(selectedBooks);
-                    Order finalOrder = new Order(newCustomer, selectedBooks);
-                    allOrders.offer(finalOrder); // Add to the queue using offer
-
-                    // Display the final order summary
-                    System.out.println("\nFinal Order:");
-                    System.out.println(finalOrder);
-                }
-                break;
-            }
-
-            try {
-                int choice = Integer.parseInt(input);
-
-                if (choice > 0 && choice <= availableBooks.size()) {
-                    Book stockBook = availableBooks.get(choice - 1);
-
-                    if (stockBook.getStock() > 0) {
-                        stockBook.setStock(stockBook.getStock() - 1);
-                        boolean found = false;
-
-                        // If already in selected list, increase quantity
-                        for (int i = 0; i < selectedBooks.size(); i++) {
-                            Book b = selectedBooks.get(i);
-                            if (b.getTitle().equals(stockBook.getTitle())) {
-                                b.incrementQuantity();
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        // Else add new book to selected list with quantity 1
-                        if (!found) {
-                            Book orderedBook = new Book(stockBook.getTitle(), stockBook.getAuthor(), stockBook.getPrice(), 0);
-                            orderedBook.setQuantity(1);
-                            selectedBooks.add(orderedBook);
-                        }
-
-                        System.out.println("You picked: " + stockBook.toStockString());
-                    } else {
-                        System.out.println("Sorry, that book is out of stock.");
-                    }
-                } else {
-                    System.out.println("Invalid choice. Please pick a number between 1 and " + availableBooks.size());
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
-            }
-        }
-    }
-
-    // Method to search and display an order by its ID
-    private static void searchOrder(Scanner scanner, LinkedQueueADT<Order> allOrders) {
-        if (allOrders.isEmpty()) { // Use isEmpty() for the queue
-            System.out.println("There are no orders currently.");
-            return;
-        }
-
-        while (true) {
-            System.out.print("Enter order ID (or press Enter to cancel): ");
-            String input = scanner.nextLine();
-
-            if (input.isBlank()) {
-                System.out.println("Search cancelled");
-                break;
-            }
-
-            try {
-                int targetOrderId = Integer.parseInt(input);
-                boolean found = false;
-
-                // Create a temporary queue to iterate and search
-                LinkedQueueADT<Order> tempQueue = new LinkedQueueADT<>();
-                while (!allOrders.isEmpty()) {
-                    Order order = allOrders.poll(); // Dequeue from original
-                    if (order.getOrderID() == targetOrderId) {
-                        System.out.println("Order found:");
-                        System.out.println(order);
-                        found = true;
-                    }
-                    tempQueue.offer(order); // Enqueue to temporary
-                }
-
-                // Restore original queue from temporary queue
-                while (!tempQueue.isEmpty()) {
-                    allOrders.offer(tempQueue.poll());
-                }
-
-
-                if (!found) {
-                    System.out.println("Order with ID " + targetOrderId + " not found.");
-                }
-                break;
-
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid order ID number.");
-            }
-        }
-    }
-
-    // Method to display the current status of all orders
-    private static void displayOrderStatus(LinkedQueueADT<Order> allOrders) {
-        if (allOrders.isEmpty()) { // Use isEmpty() for the queue
-            System.out.println("No orders placed yet.");
-            return;
-        }
-
-        System.out.println("\nOrder Status:");
-        // Create a temporary queue to display elements without removing them from original
-        LinkedQueueADT<Order> tempQueue = new LinkedQueueADT<>();
-        while (!allOrders.isEmpty()) {
-            Order order = allOrders.poll();
-            System.out.println("Order ID: " + order.getOrderID() +
-                    ", Customer: " + order.getCustomer().getName() +
-                    ", Status: " + order.getStatus());
-            tempQueue.offer(order);
-        }
-        // Restore original queue from temporary queue
-        while (!tempQueue.isEmpty()) {
-            allOrders.offer(tempQueue.poll());
-        }
-    }
-
-    // Method to mark an order as completed (FIFO)
-    private static void completeOrder(LinkedQueueADT<Order> allOrders) {
-        if (allOrders.isEmpty()) { // Use isEmpty() for the queue
-            System.out.println("No orders to complete.");
-            return;
-        }
-
-        // Apply FIFO: Complete the oldest order (the one at the front of the queue)
-        System.out.println("Completing the oldest order..");
-        try {
-            Order orderToComplete = allOrders.peek(); // Peek to show, then poll to remove
-            System.out.println("Attempting to complete Order ID: " + orderToComplete.getOrderID());
-
-            if (orderToComplete.getStatus().equals("Shipping..")) {
-                System.out.println("The oldest order (ID: " + orderToComplete.getOrderID() + ") is already shipping.");
-                // If it's already shipping, we don't remove it from the queue using poll,
-                // but for a true FIFO "completion," you might want to consider it processed
-                // and remove it, or have a separate "shipped" queue. For this scenario,
-                // we'll keep it in the queue if already shipped.
-            } else {
-                orderToComplete.setStatus("Shipping..");
-                System.out.println("Order ID: " + orderToComplete.getOrderID() + " completed and set to 'Shipping..'");
-                allOrders.poll(); // Remove the completed order from the queue
-            }
-        } catch (IllegalStateException e) {
-            System.out.println("Error completing order: " + e.getMessage());
         }
     }
 }

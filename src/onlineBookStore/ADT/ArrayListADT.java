@@ -1,4 +1,4 @@
-package onlineBookStore_backup.ADT;
+package onlineBookStore.ADT;
 
 public class ArrayListADT<E> {
     // Attributes
@@ -83,7 +83,7 @@ public class ArrayListADT<E> {
     // Method to remove an element at a specified index
     public E remove (int index) {
         // Checks if the provided index is out of bounds
-        if (index < 0 || index > nextIndex) {
+        if (index < 0 || index >= nextIndex) {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
 
@@ -91,15 +91,14 @@ public class ArrayListADT<E> {
 
         // Shift elements to the left to fill the gap
         // Loops from the removed index up to the second to last element
-        for (int i = index; i < nextIndex; i++) {
+        for (int i = index; i < nextIndex - 1; i++) {
             elements[i] = elements[i + 1]; // Moves each element one position to the left
         }
 
         elements[nextIndex - 1] = null; // Sets the last element to null to allow garbage collection
         nextIndex--; // Decrements nextIndex to reflect the new size
 
-        // Checks if the array needs to be shrink,
-        // to prevent excessive memory usage
+        // To prevent excessive memory usage
         // Checks if the number of elements is less than one-third of the array's capacity
         if (nextIndex < elements.length / 3) {
             E[] smallerElements = (E[]) new Object[elements.length / 2]; // Creates a smaller array with half the current capacity
