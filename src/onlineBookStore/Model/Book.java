@@ -58,6 +58,12 @@ public class Book {
         return this.quantity;
     }
 
+    public Book(Book book) {
+        this.title = book.title;
+        this.author = book.author;
+        this.price = book.price;
+        this.stock = book.stock;
+    }
 
     public void decrementStock(int amount) {
         // Checks if there is enough stock to decrement
@@ -70,11 +76,11 @@ public class Book {
     }
 
     public String toStockString() {
-        return "[Title: " + this.title + "] [By: " + this.author + "] [Price: $" + this.price + " ]|Stock: " + this.stock;
+        return "Title: " + this.title + " [Author: " + this.author + "] [Price: $" + this.price + " ]| Stock: " + this.stock;
     }
 
     public String toQuantityString() {
-        return "[Title: " + this.title + "] [By: " + this.author + "] [Price: $" + this.price + " ]|Quantity: " + this.quantity;
+        return "Title: " + this.title + " [Author: " + this.author + "] [Price: $" + this.price + " ]| Quantity: " + this.quantity;
     }
 
     public String toString() {

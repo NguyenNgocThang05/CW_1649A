@@ -24,10 +24,7 @@ public class Sorting {
         }
     }
 
-    /**
-     * Sorts an ArrayListADT of Order objects by their OrderID using the Insertion Sort algorithm.
-     * @param orders The ArrayListADT of Order objects to be sorted.
-     */
+    // Insertion sort to sort Order IDs for binary search
     public static void insertionSortOrdersById(ArrayListADT<Order> orders) {
         for (int i = 1; i < orders.size(); i++) { // Starts iterating from the second element, as the first is considered a sorted subarray of one.
             Order current = orders.get(i); // Stores the current element to be inserted into its correct position.

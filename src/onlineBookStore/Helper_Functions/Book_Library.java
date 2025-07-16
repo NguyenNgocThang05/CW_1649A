@@ -6,7 +6,7 @@ import onlineBookStore.Model.Book;
 
 public class Book_Library {
     // Attribute
-    private ArrayListADT<Book> library; // Declare a private ArrayListADT to store Book objects in the library
+    private final ArrayListADT<Book> library; // Declare a private ArrayListADT to store Book objects in the library
 
     // Constructor
     public Book_Library() {

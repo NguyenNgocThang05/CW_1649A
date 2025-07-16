@@ -9,7 +9,7 @@ public class Order {
     private static int nextOrderID = 1; // Declares a private static int variable to generate order ID. 'static' means it belongs to the class itself, not individual objects
     private ArrayListADT<Book> books; // Declares a private ArrayListADT to hold the Book objects included in this order
     private Customer customer; // Declares a private Customer object to store information of the customer who placed this order
-    private String status = "Pending.."; // Declares a private String variable to store the status of the order
+    private OrderStatus status = OrderStatus.PENDING; // Declares a variable to store the status of the order
                                          // "Pending.." as a default value
 
     // Constructor
@@ -44,12 +44,16 @@ public class Order {
         return this.customer;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return this.status;
+    }
+
+    public void markAsComplete() {
+        this.status = OrderStatus.COMPLETE;
     }
 
     public double calculateTotal() {

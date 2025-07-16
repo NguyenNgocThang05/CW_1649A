@@ -29,6 +29,6 @@ public class Customer {
     }
 
     public String toString() {
-        return "Order by " + this.name + " from " + this.address;
+        return "Customer name: " + this.name + "\nAddress: " + this.address;
     }
 }

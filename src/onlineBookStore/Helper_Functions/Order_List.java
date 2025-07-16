@@ -5,27 +5,20 @@ import onlineBookStore.Model.Order; // Imports the Order class.
 import onlineBookStore.Algorithm.Sorting; // Imports the Sorting utility class.
 
 public class Order_List {
-    private OrderQueue pendingOrders; // Declares an OrderQueue to manage pending orders.
-    private OrderQueue finishedOrders; // Declares an OrderQueue to manage completed orders.
+    private final OrderQueue pendingOrders; // Declares an OrderQueue to manage pending orders.
+    private final OrderQueue finishedOrders; // Declares an OrderQueue to manage completed orders.
 
     public Order_List() {
         this.pendingOrders = new OrderQueue(); // Initializes the pending orders queue.
         this.finishedOrders = new OrderQueue(); // Initializes the finished orders queue.
     }
 
-    /**
-     * Adds a new order to the system, placing it in the pending queue and keeping the list sorted.
-     * @param order The order to be added.
-     */
     public void addOrder(Order order) {
         this.pendingOrders.enqueue(order); // Adds the new order to the pending queue's internal ArrayListADT.
         Sorting.insertionSortOrdersById(this.pendingOrders.queue); // Sorts the entire internal list of the pending queue by OrderID for binary search.
         System.out.println("Order " + order.getOrderID() + " added to pending."); // Confirms the order has been added.
     }
 
-    /**
-     * Completes the oldest pending order, updating its status and moving it to the finished queue.
-     */
     public void finishOrder() {
         if (this.pendingOrders.isEmpty()) { // Checks if there are any orders in the pending queue.
             System.out.println("No orders to finish."); // Informs the user if no orders are pending.
@@ -33,7 +26,7 @@ public class Order_List {
         }
 
         Order completedOrder = this.pendingOrders.dequeue(); // Removes the oldest pending order (O(N) operation).
-        completedOrder.setStatus("Completed"); // Updates the status of the dequeued order.
+        completedOrder.markAsComplete(); // Updates the status of the dequeued order.
 
         this.finishedOrders.enqueue(completedOrder); // Adds the completed order to the finished orders queue.
         Sorting.insertionSortOrdersById(this.finishedOrders.queue); // Sorts the internal list of the finished orders queue by OrderID.
@@ -41,16 +34,13 @@ public class Order_List {
         System.out.println("Order " + completedOrder.getOrderID() + " has been finished."); // Confirms the order completion.
     }
 
-    /**
-     * Displays the status of both pending and finished orders.
-     */
     public void showOrderStatus() {
         if (this.pendingOrders.isEmpty() && this.finishedOrders.isEmpty()) { // Checks if both queues are entirely empty.
             System.out.println("No orders to display status for."); // Informs if there are no orders in the system.
             return; // Exits the method.
         }
 
-        System.out.println("\n--- Order Status ---"); // Prints a header for order status.
+        System.out.println("\nOrder Status"); // Prints a header for order status.
 
         System.out.println("\nPending Orders:"); // Header for pending orders.
         if (pendingOrders.isEmpty()) { // Checks if the pending queue is empty.
@@ -72,18 +62,10 @@ public class Order_List {
         System.out.println("--------------------"); // Prints a footer.
     }
 
-    /**
-     * Provides access to the pending orders queue.
-     * @return The OrderQueue containing pending orders.
-     */
     public OrderQueue getPendingOrdersQueue() {
         return this.pendingOrders; // Returns the pending orders OrderQueue object.
     }
 
-    /**
-     * Provides access to the finished orders queue.
-     * @return The OrderQueue containing finished orders.
-     */
     public OrderQueue getFinishedOrdersQueue() {
         return this.finishedOrders; // Returns the finished orders OrderQueue object.
     }

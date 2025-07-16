@@ -1,10 +1,8 @@
 package onlineBookStore;
 
-import onlineBookStore.ADT.LinkedStackADT;
 import onlineBookStore.Helper_Functions.Book_Library;
 import onlineBookStore.Helper_Functions.Menu_Handler;
 import onlineBookStore.Helper_Functions.Order_List;
-import onlineBookStore.Model.Order;
 
 import java.util.Scanner;
 
@@ -14,7 +12,6 @@ public class Main {
 
         Book_Library availableBooks = new Book_Library();
         Order_List allOrders = new Order_List();
-        LinkedStackADT<Order> viewedOrderHistory = new LinkedStackADT<>();
 
         Menu_Handler menuHandler = new Menu_Handler();
         System.out.println("\nWelcome to Online Bookstore");
@@ -24,7 +21,7 @@ public class Main {
             System.out.println("2. Search Order Detail");
             System.out.println("3. Display Order Status");
             System.out.println("4. Complete An Order");
-            System.out.println("5. View Search Order History");
+            System.out.println("5. Search Book");
             System.out.println("6. Exit");
             System.out.print("Choose an option (1-6): ");
 
@@ -37,7 +34,7 @@ public class Main {
                     break;
 
                 case "2":
-                    menuHandler.handleSearchOrderDetail(scanner, allOrders, viewedOrderHistory);
+                    menuHandler.handleSearchOrderDetail(scanner, allOrders);
                     break;
 
                 case "3":
@@ -49,7 +46,7 @@ public class Main {
                     break;
 
                 case "5":
-                    menuHandler.handleViewOrderHistory(viewedOrderHistory);
+                    menuHandler.handleSearchBook(scanner, availableBooks);
                     break;
 
                 case "6":
