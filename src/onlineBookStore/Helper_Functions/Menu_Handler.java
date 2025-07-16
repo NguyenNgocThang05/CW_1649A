@@ -6,7 +6,7 @@ import onlineBookStore.Model.Customer;
 import onlineBookStore.Model.Order;
 import onlineBookStore.Algorithm.Search;
 
-import java.util.Scanner; // Imports Scanner for user input.
+import java.util.Scanner;
 
 public class Menu_Handler {
     public void handleOrderBook(Scanner scanner, Book_Library availableBooks, Order_List allOrders) {
