@@ -81,3 +81,23 @@ public class Order {
         return orderDetails.toString(); // Returns the final string built by the StringBuilder
     }
 }
+
+class OrderTestDrive{
+    public static void main(String[] args) {
+        Book book1 = new Book("Book 1", "Author 1", 10.0, 5);
+        Book book2 = new Book("Book 2", "Author 2", 20.0, 3);
+
+        book1.setQuantity(2);
+        book2.setQuantity(1);
+
+        ArrayListADT<Book> books = new ArrayListADT<>();
+        books.add(book1);
+        books.add(book2);
+
+        Customer customer = new Customer("Test", "Test Address");
+
+        Order order = new Order(customer, books);
+
+        System.out.println(order);
+    }
+}

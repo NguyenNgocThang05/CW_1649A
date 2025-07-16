@@ -87,3 +87,12 @@ public class Book {
         return toQuantityString();
     }
 }
+
+class BookTestDrive{
+    public static void main(String[] args) {
+        Book book1 = new Book("Book1", "Author1", 10.0, 5);
+        book1.setQuantity(2);
+        System.out.println(book1);
+        System.out.println(book1.toStockString());
+    }
+}

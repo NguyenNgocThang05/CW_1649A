@@ -32,3 +32,10 @@ public class Customer {
         return "Customer name: " + this.name + "\nAddress: " + this.address;
     }
 }
+
+class CustomerTestDrive {
+    public static void main(String[] args) {
+        Customer customer1 = new Customer("Username", "123 st");
+        System.out.println(customer1);
+    }
+}
