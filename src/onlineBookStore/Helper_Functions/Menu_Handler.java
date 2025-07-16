@@ -105,7 +105,6 @@ public class Menu_Handler {
         Order newOrder = new Order(customer, booksToOrder); // Creates a new Order object with customer and book list.
         allOrders.addOrder(newOrder); // Adds the created order to the main order management system.
 
-        System.out.println("\nOrder placed successfully!"); // Confirms successful order placement.
         System.out.println(newOrder); // Prints the details of the newly placed order.
     }
 

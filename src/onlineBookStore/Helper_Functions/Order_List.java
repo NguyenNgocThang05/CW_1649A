@@ -1,8 +1,8 @@
 package onlineBookStore.Helper_Functions;
 
+import onlineBookStore.ADT.LinkedStackADT;
 import onlineBookStore.ADT.OrderQueue; // Imports the custom OrderQueue class.
 import onlineBookStore.Model.Order; // Imports the Order class.
-import onlineBookStore.Algorithm.Sorting; // Imports the Sorting utility class.
 
 public class Order_List {
     private final OrderQueue pendingOrders; // Declares an OrderQueue to manage pending orders.
@@ -15,8 +15,7 @@ public class Order_List {
 
     public void addOrder(Order order) {
         this.pendingOrders.enqueue(order); // Adds the new order to the pending queue's internal ArrayListADT.
-        Sorting.insertionSortOrdersById(this.pendingOrders.queue); // Sorts the entire internal list of the pending queue by OrderID for binary search.
-        System.out.println("Order " + order.getOrderID() + " added to pending."); // Confirms the order has been added.
+        System.out.println("\nOrder " + order.getOrderID() + " added to pending."); // Confirms the order has been added.
     }
 
     public void finishOrder() {
@@ -25,16 +24,16 @@ public class Order_List {
             return; // Exits the method if the queue is empty.
         }
 
-        Order completedOrder = this.pendingOrders.dequeue(); // Removes the oldest pending order (O(N) operation).
+        Order completedOrder = this.pendingOrders.dequeue(); // Removes the oldest pending order
         completedOrder.markAsComplete(); // Updates the status of the dequeued order.
 
         this.finishedOrders.enqueue(completedOrder); // Adds the completed order to the finished orders queue.
-        Sorting.insertionSortOrdersById(this.finishedOrders.queue); // Sorts the internal list of the finished orders queue by OrderID.
-
         System.out.println("Order " + completedOrder.getOrderID() + " has been finished."); // Confirms the order completion.
     }
 
     public void showOrderStatus() {
+        LinkedStackADT<Order> statusStack = new LinkedStackADT<>();
+
         if (this.pendingOrders.isEmpty() && this.finishedOrders.isEmpty()) { // Checks if both queues are entirely empty.
             System.out.println("No orders to display status for."); // Informs if there are no orders in the system.
             return; // Exits the method.
@@ -46,8 +45,14 @@ public class Order_List {
         if (pendingOrders.isEmpty()) { // Checks if the pending queue is empty.
             System.out.println("No pending orders."); // Informs if no pending orders exist.
         } else {
+            // Push all pending orders to stack
             for (int i = 0; i < pendingOrders.size(); i++) { // Iterates through the pending orders.
-                System.out.println(pendingOrders.get(i)); // Prints each pending order, displayed in sorted order.
+                statusStack.push(pendingOrders.get(i));
+            }
+
+            // Pop from stack to show the most recent first
+            while (!statusStack.isEmpty()) {
+                System.out.println(statusStack.pop());
             }
         }
 
@@ -55,8 +60,17 @@ public class Order_List {
         if (finishedOrders.isEmpty()) { // Checks if the finished queue is empty.
             System.out.println("No finished orders."); // Informs if no finished orders exist.
         } else {
+            // Clear stack for reuse
+            statusStack = new LinkedStackADT<>();
+
+            // Push finished orders
             for (int i = 0; i < finishedOrders.size(); i++) { // Iterates through the finished orders.
-                System.out.println(finishedOrders.get(i)); // Prints each finished order, displayed in sorted order.
+                statusStack.push(finishedOrders.get(i)); // Prints each finished order, displayed in sorted order.
+            }
+
+            // Display the finished orders
+            while (!statusStack.isEmpty()) {
+                System.out.println(statusStack.pop());
             }
         }
         System.out.println("--------------------"); // Prints a footer.

@@ -3,7 +3,6 @@ package onlineBookStore.Algorithm;
 
 import onlineBookStore.ADT.ArrayListADT;
 import onlineBookStore.Model.Book;
-import onlineBookStore.Model.Order;
 
 public class Sorting {
     // Insertion sort to sort books by title (A-Z)
@@ -21,20 +20,6 @@ public class Sorting {
             }
 
             books.set(j + 1, current); // Inserts the current element into its correct sorted position
-        }
-    }
-
-    // Insertion sort to sort Order IDs for binary search
-    public static void insertionSortOrdersById(ArrayListADT<Order> orders) {
-        for (int i = 1; i < orders.size(); i++) { // Starts iterating from the second element, as the first is considered a sorted subarray of one.
-            Order current = orders.get(i); // Stores the current element to be inserted into its correct position.
-            int j = i - 1; // Initializes a pointer to the last element of the sorted subarray.
-
-            while (j >= 0 && orders.get(j).getOrderID() > current.getOrderID()) { // Compares the current element with elements in the sorted subarray.
-                orders.set(j + 1, orders.get(j)); // Shifts elements larger than 'current' one position to the right.
-                j--; // Moves the pointer to the left to compare with the next element in the sorted subarray.
-            }
-            orders.set(j + 1, current); // Inserts the 'current' element into its correct sorted position.
         }
     }
 }
