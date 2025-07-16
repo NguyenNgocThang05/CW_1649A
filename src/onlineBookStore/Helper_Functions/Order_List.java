@@ -32,7 +32,8 @@ public class Order_List {
     }
 
     public void showOrderStatus() {
-        LinkedStackADT<Order> statusStack = new LinkedStackADT<>();
+        LinkedStackADT<Order> pendingStack = new LinkedStackADT<>(); // Stack for pending orders
+        LinkedStackADT<Order> finishedStack = new LinkedStackADT<>(); // Stack for finished orders
 
         if (this.pendingOrders.isEmpty() && this.finishedOrders.isEmpty()) { // Checks if both queues are entirely empty.
             System.out.println("No orders to display status for."); // Informs if there are no orders in the system.
@@ -47,12 +48,12 @@ public class Order_List {
         } else {
             // Push all pending orders to stack
             for (int i = 0; i < pendingOrders.size(); i++) { // Iterates through the pending orders.
-                statusStack.push(pendingOrders.get(i));
+                pendingStack.push(pendingOrders.get(i));
             }
 
             // Pop from stack to show the most recent first
-            while (!statusStack.isEmpty()) {
-                System.out.println(statusStack.pop());
+            while (!pendingStack.isEmpty()) {
+                System.out.println(pendingStack.pop());
             }
         }
 
@@ -60,17 +61,14 @@ public class Order_List {
         if (finishedOrders.isEmpty()) { // Checks if the finished queue is empty.
             System.out.println("No finished orders."); // Informs if no finished orders exist.
         } else {
-            // Clear stack for reuse
-            statusStack = new LinkedStackADT<>();
-
             // Push finished orders
             for (int i = 0; i < finishedOrders.size(); i++) { // Iterates through the finished orders.
-                statusStack.push(finishedOrders.get(i)); // Prints each finished order, displayed in sorted order.
+                finishedStack.push(finishedOrders.get(i)); // Prints each finished order, displayed in sorted order.
             }
 
             // Display the finished orders
-            while (!statusStack.isEmpty()) {
-                System.out.println(statusStack.pop());
+            while (!finishedStack.isEmpty()) {
+                System.out.println(finishedStack.pop());
             }
         }
         System.out.println("--------------------"); // Prints a footer.
