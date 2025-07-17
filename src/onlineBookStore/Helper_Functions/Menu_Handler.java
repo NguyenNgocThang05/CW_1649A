@@ -10,102 +10,98 @@ import java.util.Scanner;
 
 public class Menu_Handler {
     public void handleOrderBook(Scanner scanner, Book_Library availableBooks, Order_List allOrders) {
-        availableBooks.list_all(); // Displays all books currently available in the library.
-        ArrayListADT<Book> booksToOrder = new ArrayListADT<>(); // Creates a temporary list to hold books selected for the current order.
-        int bookChoice; // Declares a variable for the chosen book number.
+        // Display available books
+        availableBooks.list_all();
+        ArrayListADT<Book> booksToOrder = new ArrayListADT<>();
+        int bookChoice;
 
-        if (availableBooks.getBookCount() == 0) { // Checks if there are any books in the library to order.
+        // Check if the library is empty
+        if (availableBooks.getLibrarySize() == 0) {
             System.out.println("Cannot place an order as there are no books available.");
-            return; // Exits the method
+            return;
         }
 
-        while (true) { // Loop to allow multiple books to be added to a single order.
-            System.out.print("Enter the number of the book you want to order (or press Enter to finish): ");
-            String input = scanner.nextLine().trim(); // Reads user input for book choice.
+        while (true) {
+            // Book Selection
+            System.out.print("Enter book number to add to your order (1-" + availableBooks.getLibrarySize() + ", or press Enter to finish): ");
+            String bookInput = scanner.nextLine().trim();
 
-            if (input.isEmpty()) { // Checks if the user wants to finish adding books.
-                break; // Exits the book selection loop.
+            // Check if the input is empty
+            if (bookInput.isEmpty()) {
+                break;
             }
-
 
             try {
-                bookChoice = Integer.parseInt(input); // Converts user input to an integer.
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number or press Enter to finish."); // Handles non-numeric input for book choice.
-                continue; // Continues to the next iteration to ask for input again.
+                bookChoice = Integer.parseInt(bookInput); // Converting the input into integer
+                // Check if the book selection is within range
+                if (bookChoice < 1 || bookChoice > availableBooks.getLibrarySize()) {
+                    System.out.println("Invalid book selection. Try again.");
+                    continue;
+                }
+            } catch (NumberFormatException e) { // Catch an error if the input is non-numeric
+                System.out.println("Invalid input. Please enter a number.");
+                continue;
             }
 
-            if (bookChoice < 1 || bookChoice > availableBooks.getBookCount()) { // Validates the chosen book number against available books.
-                System.out.println("Invalid book number. Please try again."); // Informs the user of invalid book number.
-                continue; // Continues to the next iteration.
-            }
+            Book selectedBook = availableBooks.getBook(bookChoice - 1);
 
-            Book selectedBook = availableBooks.getBook(bookChoice - 1); // Retrieves the selected book object (adjusting for 0-based index).
-
-            if (selectedBook.getStock() == 0) { // Checks if the selected book is currently out of stock.
-                System.out.println("Sorry, " + selectedBook.getTitle() + " is currently out of stock."); // Informs user if book is out of stock.
-                continue; // Continues to the next iteration.
-            }
-
-            System.out.print("Enter quantity for " + selectedBook.getTitle() + ": "); // Prompts user for the desired quantity.
-            int quantity; // Declares a variable for the desired quantity.
+            // Quantity selection
+            System.out.print("Enter quantity for " + selectedBook.getTitle() + ": ");
+            int quantity;
             try {
-                quantity = Integer.parseInt(scanner.nextLine()); // Reads and converts the quantity input to an integer.
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number."); // Handles non-numeric quantity input.
-                continue; // Continues to the next iteration.
+                quantity = Integer.parseInt(scanner.nextLine().trim()); // Converting quantity input into integer
+                // Check if quantity is below or equal to 0
+                if (quantity <= 0) {
+                    System.out.println("Quantity must be positive. Try again.");
+                    continue;
+                }
+                // Check if the quantity is greater than the book's stock
+                if (quantity > selectedBook.getStock()) {
+                    System.out.println("Not enough stock. Available: " + selectedBook.getStock());
+                    continue;
+                }
+            } catch (NumberFormatException e) { // Catch an error if the input is non-numeric
+                System.out.println("Invalid quantity. Try again.");
+                continue;
             }
 
-            if (quantity <= 0) { // Validates if the quantity is positive.
-                System.out.println("Quantity must be greater than 0."); // Informs user of invalid quantity.
-                continue; // Continues to the next iteration.
-            }
-
-            if (selectedBook.getStock() < quantity) { // Checks if there is enough stock for the requested quantity.
-                System.out.println("Not enough stock for " + selectedBook.getTitle() + ". Available: " + selectedBook.getStock()); // Informs user about insufficient stock.
-                continue; // Continues to the next iteration.
-            }
-
-            Book bookForOrder = new Book(selectedBook); // Creates a copy of the book for the order.
-            bookForOrder.setQuantity(quantity); // Sets the specific quantity for this book within the order.
-            booksToOrder.add(bookForOrder); // Adds the book (with its quantity) to the temporary order list.
-            selectedBook.decrementStock(quantity); // Reduces the stock of the original book in the library.
-
-            System.out.println(quantity + " of " + selectedBook.getTitle() + " added to your order."); // Confirms book addition to order.
+            // Add book to order
+            Book orderedBook = new Book(selectedBook);
+            orderedBook.setQuantity(quantity);
+            booksToOrder.add(orderedBook);
+            selectedBook.decrementStock(quantity);
+            System.out.println(quantity + " of " + selectedBook.getTitle() + " added to your order.");
         }
 
-        if (booksToOrder.isEmpty()) { // Checks if any books were actually added to the order.
-            System.out.println("No books were added to the order."); // Informs user if the order is empty.
-            return; // Exits the method.
+        if (booksToOrder.isEmpty()) {
+            System.out.println("No books were added. Order cancelled.");
+            return;
         }
 
-        String customerName; // Declares a variable for customer's name.
-        while (true) { // Loop to ensure a valid customer name is entered.
-            System.out.print("Enter customer name: "); // Prompts for customer name.
-            customerName = scanner.nextLine().trim(); // Reads and trims customer name input.
-            if (customerName.isEmpty()) { // Checks if the name is empty.
-                System.out.println("Customer name cannot be empty. Please enter a name."); // Informs user if name is empty.
-            } else {
-                break; // Exits loop if name is valid.
-            }
+        // Customer details
+        System.out.print("Enter customer name: ");
+        String customerName = scanner.nextLine().trim();
+        while (customerName.isEmpty()) {
+            System.out.println("Name cannot be empty.");
+            System.out.print("Enter customer name: ");
+            customerName = scanner.nextLine().trim();
         }
 
-        String customerAddress; // Declares a variable for customer's address.
-        while (true) { // Loop to ensure a valid customer address is entered.
-            System.out.print("Enter customer address: "); // Prompts for customer address.
-            customerAddress = scanner.nextLine().trim(); // Reads and trims customer address input.
-            if (customerAddress.isEmpty()) { // Checks if the address is empty.
-                System.out.println("Customer address cannot be empty. Please enter an address."); // Informs user if address is empty.
-            } else {
-                break; // Exits loop if address is valid.
-            }
+        System.out.print("Enter customer address: ");
+        String customerAddress = scanner.nextLine().trim();
+        while (customerAddress.isEmpty()) {
+            System.out.println("Address cannot be empty.");
+            System.out.print("Enter customer address: ");
+            customerAddress = scanner.nextLine().trim();
         }
 
-        Customer customer = new Customer(customerName, customerAddress); // Creates a new Customer object.
-        Order newOrder = new Order(customer, booksToOrder); // Creates a new Order object with customer and book list.
-        allOrders.addOrder(newOrder); // Adds the created order to the main order management system.
+        // Create and save the order
+        Customer customer = new Customer(customerName, customerAddress);
+        Order newOrder = new Order(customer, booksToOrder);
+        allOrders.addOrder(newOrder);
 
-        System.out.println(newOrder); // Prints the details of the newly placed order.
+        System.out.println("Order created successfully:");
+        System.out.println(newOrder);
     }
 
     public void handleSearchOrderDetail(Scanner scanner, Order_List allOrders) {
@@ -115,23 +111,32 @@ public class Menu_Handler {
             return; // Exits the method.
         }
 
-        System.out.print("Enter Order ID to search: "); // Prompts the user to enter the Order ID.
-        int targetOrderID; // Declares a variable for the target Order ID.
+        while (true) {
+            System.out.print("Enter Order ID to search (or press Enter to go back to menu): "); // Prompts the user to enter the Order ID.
+            String inputOrderID = scanner.nextLine().trim();
 
-        try {
-            targetOrderID = Integer.parseInt(scanner.nextLine()); // Converts user input to an integer.
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a numeric Order ID."); // Handles non-numeric input for Order ID.
-            return; // Exits the method.
-        }
+            if (inputOrderID.isEmpty()) {
+                break;
+            }
 
-        Order foundOrder = Search.searchOrderById(allOrders, targetOrderID); // Calls the search method to find the order using binary search.
+            try {
+                int targetOrderID = Integer.parseInt(inputOrderID); // Converts user input to an integer.
+                Order foundOrder = Search.searchOrderById(allOrders, targetOrderID); // Calls the search method to find the order using binary search.
 
-        if (foundOrder != null) { // Checks if an order was found by the search.
-            System.out.println("\nOrder Found:"); // Informs the user an order was found.
-            System.out.println(foundOrder); // Prints the details of the found order.
-        } else {
-            System.out.println("Order with ID " + targetOrderID + " not found."); // Informs user if the order was not found.
+                if (targetOrderID <= 0) {
+                    System.out.println("Order ID must be a positive number");
+                    continue;
+                }
+
+                if (foundOrder != null) { // Checks if an order was found by the search.
+                    System.out.println("\nOrder Found:"); // Informs the user an order was found.
+                    System.out.println(foundOrder); // Prints the details of the found order.
+                } else {
+                    System.out.println("Order with ID " + targetOrderID + " not found."); // Informs user if the order was not found.
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a numeric Order ID."); // Handles non-numeric input for Order ID.
+            }
         }
     }
 
@@ -144,26 +149,28 @@ public class Menu_Handler {
     }
 
     public void handleSearchBook(Scanner scanner, Book_Library availableBooks) {
-        System.out.print("Enter book title to search: ");
-        String input = scanner.nextLine().trim(); // get user input
+        while (true) {
+            System.out.print("Enter book title to search (or press Enter to go back to menu): ");
+            String inputBookTitle = scanner.nextLine().trim(); // get user input
 
-        if (input.isEmpty()) {
-            System.out.println("Search cannot be empty");
-            return;
-        }
+            if (inputBookTitle.isEmpty()) {
+                break;
+            }
 
-        boolean found = false;
-        for (int i = 0; i < availableBooks.getBookCount(); i++) {
-            Book book = availableBooks.getBook(i);
-            // Comparison
-            if (book.getTitle().toLowerCase().contains(input.toLowerCase())) {
-                System.out.println("Found: " + book.toStockString()); // Display book details
-                found = true;
+            boolean found = false;
+            for (int i = 0; i < availableBooks.getLibrarySize(); i++) {
+                Book book = availableBooks.getBook(i);
+                // Comparison
+                if (book.getTitle().toLowerCase().contains(inputBookTitle.toLowerCase())) {
+                    System.out.println("Found: " + book.toStockString()); // Display book details
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                System.out.println("No books found matching: " + inputBookTitle);
             }
         }
 
-        if (!found) {
-            System.out.println("No books found matching: " + input);
-        }
     }
 }

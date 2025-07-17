@@ -63,9 +63,15 @@ public class Book {
         this.author = book.author;
         this.price = book.price;
         this.stock = book.stock;
+        this.quantity = book.quantity;
     }
 
     public void decrementStock(int amount) {
+        if (amount <= 0) {
+            System.out.println("Invalid amount. Must be positive");
+            return;
+        }
+
         // Checks if there is enough stock to decrement
         if (this.stock >= amount) {
             this.stock -= amount; // Decreases the stock attribute by the given amount
@@ -88,11 +94,3 @@ public class Book {
     }
 }
 
-class BookTestDrive{
-    public static void main(String[] args) {
-        Book book1 = new Book("Book1", "Author1", 10.0, 5);
-        book1.setQuantity(2);
-        System.out.println(book1);
-        System.out.println(book1.toStockString());
-    }
-}

@@ -18,6 +18,8 @@ public class Book_Library {
         library.add(new Book("In Search of Lost Time", "Marcel Proust", 30.99, 5));
         library.add(new Book("1984", "George Orwell", 35.99, 6));
         library.add(new Book("The Lord of the Rings", "J.R.R. Tolkien", 40.99, 7));
+
+        Sorting.insertionSortBook(library); // Sort books by title
     }
 
     public void list_all() {
@@ -25,8 +27,6 @@ public class Book_Library {
         if (library.isEmpty()) {
             System.out.println("No books available");
         } else { // If there are books in the list
-            Sorting.insertionSortBook(library); // Sort the books in the library using the insertion sort
-
             System.out.println("Available books:\n");
             // Loops through each book in sorted list
             for (int i = 0; i < library.size(); i++) {
@@ -47,7 +47,7 @@ public class Book_Library {
     }
 
     // To get the total number of books in the library
-    public int getBookCount() {
+    public int getLibrarySize() {
         return library.size(); // Returns the number of elements in the books ArrayListADT
     }
 }
