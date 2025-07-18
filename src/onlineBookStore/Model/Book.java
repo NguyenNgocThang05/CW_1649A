@@ -2,7 +2,7 @@ package onlineBookStore.Model;
 
 public class Book {
     // Attributes
-    private String title; // Declares a private String variable to store the book's title. 'private' means it can only be accessed within this class.
+    private String title; // Declares a private String variable to store the book's title.
     private String author; // Declares a private String variable to store the book's author
     private double price; // Declares a private double variable to store the book's price
     private int stock; // Declares a private int variable to store the book's stock
