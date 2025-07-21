@@ -7,7 +7,7 @@ import onlineBookStore.Model.Book;
 public class Sorting {
     // Insertion sort to sort books by title (A-Z)
     public static void insertionSortBook(ArrayListADT<Book> books) {
-        // Starts a loop from the second element (index 1) to the end of the list. The first element (index 0) is considered stored
+        // Starts a loop from the second element (index 1) to the end of the list. The first element (index 0) is considered sorted
         for (int i = 1; i < books.size(); i++) {
             Book current = books.get(i); // Stores to the temporary current variable
             int j = i - 1; // Initialize an index j to the last element of the sorted portion
