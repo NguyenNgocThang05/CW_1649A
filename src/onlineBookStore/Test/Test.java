@@ -74,7 +74,6 @@ class BookTest {
         assertEquals(newQuantity, book.getQuantity());
     }
 
-    // Business logic tests
     @Test
     void decrementStock_ShouldReduceStock_WhenEnoughAvailable() {
         int initialStock = book.getStock();
@@ -106,7 +105,6 @@ class BookTest {
         assertEquals(initialStock, book.getStock());
     }
 
-    // String representation tests
     @Test
     void toStockString_ShouldContainCorrectInformation() {
         String stockString = book.toStockString();

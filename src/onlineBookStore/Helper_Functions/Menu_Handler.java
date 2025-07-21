@@ -47,9 +47,10 @@ public class Menu_Handler {
 
             // Quantity selection
             System.out.print("Enter quantity for " + selectedBook.getTitle() + ": ");
+            String quantityInput = scanner.nextLine().trim();
             int quantity;
             try {
-                quantity = Integer.parseInt(scanner.nextLine().trim()); // Converting quantity input into integer
+                quantity = Integer.parseInt(quantityInput); // Converting quantity input into integer
                 // Check if quantity is below or equal to 0
                 if (quantity <= 0) {
                     System.out.println("Quantity must be positive. Try again.");
