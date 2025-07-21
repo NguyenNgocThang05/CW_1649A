@@ -1,8 +1,8 @@
 package onlineBookStore.Helper_Functions;
 
 import onlineBookStore.ADT.LinkedStackADT;
-import onlineBookStore.ADT.OrderQueue; // Imports the custom OrderQueue class.
-import onlineBookStore.Model.Order; // Imports the Order class.
+import onlineBookStore.ADT.OrderQueue;
+import onlineBookStore.Model.Order;
 
 public class Order_List {
     private final OrderQueue pendingOrders; // Declares an OrderQueue to manage pending orders.
