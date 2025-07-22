@@ -4,10 +4,10 @@ import onlineBookStore.ADT.OrderQueue;
 import onlineBookStore.Model.Order;
 import onlineBookStore.Model.OrderStatus;
 
-public class Order_List {
+public class OrderList {
     private final OrderQueue allOrders; // Declares an OrderQueue to manage pending orders.
 
-    public Order_List() {
+    public OrderList() {
         this.allOrders = new OrderQueue();
     }
 

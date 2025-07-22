@@ -9,10 +9,10 @@ import onlineBookStore.Algorithm.Search;
 
 import java.util.Scanner;
 
-public class Menu_Handler {
-    public static void handleOrderBook(Scanner scanner, Book_Library availableBooks, Order_List allOrders) {
+public class MenuManager {
+    public static void handleOrderBook(Scanner scanner, BookLibrary availableBooks, OrderList allOrders) {
         // Display available books
-        availableBooks.list_all();
+        availableBooks.listAll();
         ArrayListADT<Book> booksToOrder = new ArrayListADT<>();
         int bookChoice;
 
@@ -106,7 +106,7 @@ public class Menu_Handler {
         System.out.println(newOrder);
     }
 
-    public static void handleSearchOrderDetail(Scanner scanner, Order_List allOrders, LinkedStackADT<Order> orderSearchHistory) {
+    public static void handleSearchOrderDetail(Scanner scanner, OrderList allOrders, LinkedStackADT<Order> orderSearchHistory) {
 
         if (allOrders.getAllOrders().isEmpty()) { // Checks if there are any orders in the system to search.
             System.out.println("No orders to search yet."); // Informs the user if no orders exist.
@@ -145,11 +145,11 @@ public class Menu_Handler {
         }
     }
 
-    public static void handleDisplayOrderStatus(Order_List allOrders) {
+    public static void handleDisplayOrderStatus(OrderList allOrders) {
         allOrders.showOrderStatus(); // shows all orders status
     }
 
-    public static void handleCompleteOrder(Order_List allOrders) {
+    public static void handleCompleteOrder(OrderList allOrders) {
         allOrders.finishOrder(); // Calls the method in Order_List to complete the oldest pending order.
     }
 

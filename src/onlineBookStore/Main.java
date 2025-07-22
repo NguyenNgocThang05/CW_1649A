@@ -1,9 +1,9 @@
 package onlineBookStore;
 
 import onlineBookStore.ADT.LinkedStackADT;
-import onlineBookStore.Helper_Functions.Book_Library;
-import onlineBookStore.Helper_Functions.Menu_Handler;
-import onlineBookStore.Helper_Functions.Order_List;
+import onlineBookStore.Helper_Functions.BookLibrary;
+import onlineBookStore.Helper_Functions.MenuManager;
+import onlineBookStore.Helper_Functions.OrderList;
 import onlineBookStore.Model.Order;
 
 import java.util.Scanner;
@@ -12,8 +12,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Book_Library availableBooks = new Book_Library();
-        Order_List allOrders = new Order_List();
+        BookLibrary availableBooks = new BookLibrary();
+        OrderList allOrders = new OrderList();
         LinkedStackADT<Order> orderSearchHistory = new LinkedStackADT<>();
 
         System.out.println("\nWelcome to Online Bookstore");
@@ -31,23 +31,23 @@ public class Main {
             // Handle user menu selection
             switch (menuChoice) {
                 case "1":
-                    Menu_Handler.handleOrderBook(scanner, availableBooks, allOrders);
+                    MenuManager.handleOrderBook(scanner, availableBooks, allOrders);
                     break;
 
                 case "2":
-                    Menu_Handler.handleSearchOrderDetail(scanner, allOrders, orderSearchHistory);
+                    MenuManager.handleSearchOrderDetail(scanner, allOrders, orderSearchHistory);
                     break;
 
                 case "3":
-                    Menu_Handler.handleDisplayOrderStatus(allOrders);
+                    MenuManager.handleDisplayOrderStatus(allOrders);
                     break;
 
                 case "4":
-                    Menu_Handler.handleCompleteOrder(allOrders);
+                    MenuManager.handleCompleteOrder(allOrders);
                     break;
 
                 case "5":
-                    Menu_Handler.handleSearchHistory(scanner, orderSearchHistory);
+                    MenuManager.handleSearchHistory(scanner, orderSearchHistory);
                     break;
 
                 case "6":

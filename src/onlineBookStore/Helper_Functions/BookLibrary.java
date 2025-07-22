@@ -4,12 +4,12 @@ import onlineBookStore.ADT.ArrayListADT;
 import onlineBookStore.Algorithm.Sorting;
 import onlineBookStore.Model.Book;
 
-public class Book_Library {
+public class BookLibrary {
     // Attribute
     private final ArrayListADT<Book> library; // Declare a private ArrayListADT to store Book objects in the library
 
     // Constructor
-    public Book_Library() {
+    public BookLibrary() {
         library = new ArrayListADT<>(); // Initialize the books ArrayListADT when a Book_Library object is created
 
         // Add several book objects to the library
@@ -22,7 +22,7 @@ public class Book_Library {
         Sorting.insertionSortBook(library); // Sort books by title
     }
 
-    public void list_all() {
+    public void listAll() {
         // Checks if the book list is empty
         if (library.isEmpty()) {
             System.out.println("No books available");

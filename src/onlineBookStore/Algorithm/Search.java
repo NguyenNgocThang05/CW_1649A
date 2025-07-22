@@ -1,7 +1,7 @@
 package onlineBookStore.Algorithm;
 
 import onlineBookStore.ADT.OrderQueue; // Imports OrderQueue for search operations.
-import onlineBookStore.Helper_Functions.Order_List; // Imports Order_List to access the order queues.
+import onlineBookStore.Helper_Functions.OrderList; // Imports Order_List to access the order queues.
 import onlineBookStore.Model.Order; // Imports the Order class.
 
 public class Search {
@@ -26,7 +26,7 @@ public class Search {
         return null; // Returns null if the order is not found
     }
 
-    public static Order searchOrderById(Order_List allOrders, int targetOrderID){
+    public static Order searchOrderById(OrderList allOrders, int targetOrderID){
         // Retrieve the OrderQueue from Order_List
         OrderQueue queue = allOrders.getAllOrders();
         return binarySearch(queue, targetOrderID);
