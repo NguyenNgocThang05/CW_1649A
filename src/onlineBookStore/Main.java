@@ -1,8 +1,10 @@
 package onlineBookStore;
 
+import onlineBookStore.ADT.LinkedStackADT;
 import onlineBookStore.Helper_Functions.Book_Library;
 import onlineBookStore.Helper_Functions.Menu_Handler;
 import onlineBookStore.Helper_Functions.Order_List;
+import onlineBookStore.Model.Order;
 
 import java.util.Scanner;
 
@@ -12,16 +14,15 @@ public class Main {
 
         Book_Library availableBooks = new Book_Library();
         Order_List allOrders = new Order_List();
+        LinkedStackADT<Order> orderSearchHistory = new LinkedStackADT<>();
 
-        Menu_Handler menuHandler = new Menu_Handler();
         System.out.println("\nWelcome to Online Bookstore");
-
         while (true) {
             System.out.println("\n1. Order Book");
             System.out.println("2. Search Order Detail");
             System.out.println("3. Display Order Status");
             System.out.println("4. Complete An Order");
-            System.out.println("5. Search Book");
+            System.out.println("5. View Order History");
             System.out.println("6. Exit");
             System.out.print("Choose an option (1-6): ");
 
@@ -30,23 +31,23 @@ public class Main {
             // Handle user menu selection
             switch (menuChoice) {
                 case "1":
-                    menuHandler.handleOrderBook(scanner, availableBooks, allOrders);
+                    Menu_Handler.handleOrderBook(scanner, availableBooks, allOrders);
                     break;
 
                 case "2":
-                    menuHandler.handleSearchOrderDetail(scanner, allOrders);
+                    Menu_Handler.handleSearchOrderDetail(scanner, allOrders, orderSearchHistory);
                     break;
 
                 case "3":
-                    menuHandler.handleDisplayOrderStatus(allOrders);
+                    Menu_Handler.handleDisplayOrderStatus(allOrders);
                     break;
 
                 case "4":
-                    menuHandler.handleCompleteOrder(allOrders);
+                    Menu_Handler.handleCompleteOrder(allOrders);
                     break;
 
                 case "5":
-                    menuHandler.handleSearchBook(scanner, availableBooks);
+                    Menu_Handler.handleSearchHistory(scanner, orderSearchHistory);
                     break;
 
                 case "6":

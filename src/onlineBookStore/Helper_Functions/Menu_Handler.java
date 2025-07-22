@@ -1,6 +1,7 @@
 package onlineBookStore.Helper_Functions;
 
 import onlineBookStore.ADT.ArrayListADT;
+import onlineBookStore.ADT.LinkedStackADT;
 import onlineBookStore.Model.Book;
 import onlineBookStore.Model.Customer;
 import onlineBookStore.Model.Order;
@@ -9,7 +10,7 @@ import onlineBookStore.Algorithm.Search;
 import java.util.Scanner;
 
 public class Menu_Handler {
-    public void handleOrderBook(Scanner scanner, Book_Library availableBooks, Order_List allOrders) {
+    public static void handleOrderBook(Scanner scanner, Book_Library availableBooks, Order_List allOrders) {
         // Display available books
         availableBooks.list_all();
         ArrayListADT<Book> booksToOrder = new ArrayListADT<>();
@@ -105,9 +106,9 @@ public class Menu_Handler {
         System.out.println(newOrder);
     }
 
-    public void handleSearchOrderDetail(Scanner scanner, Order_List allOrders) {
+    public static void handleSearchOrderDetail(Scanner scanner, Order_List allOrders, LinkedStackADT<Order> orderSearchHistory) {
 
-        if (allOrders.getPendingOrdersQueue().isEmpty() && allOrders.getFinishedOrdersQueue().isEmpty()) { // Checks if there are any orders in the system to search.
+        if (allOrders.getAllOrders().isEmpty()) { // Checks if there are any orders in the system to search.
             System.out.println("No orders to search yet."); // Informs the user if no orders exist.
             return; // Exits the method.
         }
@@ -132,6 +133,9 @@ public class Menu_Handler {
                 if (foundOrder != null) { // Checks if an order was found by the search.
                     System.out.println("\nOrder Found:"); // Informs the user an order was found.
                     System.out.println(foundOrder); // Prints the details of the found order.
+
+                    // Add to search history
+                    orderSearchHistory.push(foundOrder);
                 } else {
                     System.out.println("Order with ID " + targetOrderID + " not found."); // Informs user if the order was not found.
                 }
@@ -141,35 +145,49 @@ public class Menu_Handler {
         }
     }
 
-    public void handleDisplayOrderStatus(Order_List allOrders) {
+    public static void handleDisplayOrderStatus(Order_List allOrders) {
         allOrders.showOrderStatus(); // shows all orders status
     }
 
-    public void handleCompleteOrder(Order_List allOrders) {
+    public static void handleCompleteOrder(Order_List allOrders) {
         allOrders.finishOrder(); // Calls the method in Order_List to complete the oldest pending order.
     }
 
-    public void handleSearchBook(Scanner scanner, Book_Library availableBooks) {
+    public static void handleSearchHistory (Scanner scanner, LinkedStackADT<Order> orderSearchHistory) {
+        if (orderSearchHistory.isEmpty()) {
+            System.out.println("\nNo search history found.");
+            return;
+        }
+
         while (true) {
-            System.out.print("Enter book title to search (or press Enter to go back to menu): ");
-            String inputBookTitle = scanner.nextLine().trim(); // get user input
+            System.out.println("\nRecently searched order: " + orderSearchHistory.peek().getOrderID());
+            System.out.println("1. Undo last search");
+            System.out.println("2. Show full history");
+            System.out.println("3. Go back to main menu");
+            System.out.print("Enter your choice: ");
+            String input = scanner.nextLine().trim();
 
-            if (inputBookTitle.isEmpty()) {
+            switch (input) {
+                case "1":
+                    Order undoSearch = orderSearchHistory.pop();
+                    System.out.println("\nUndid search for Order ID: " + undoSearch.getOrderID());
+                    break;
+
+                case "2":
+                    System.out.println("\nAll search history:");
+                    System.out.println(orderSearchHistory);
+                    break;
+
+                case "3":
+                    return;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+
+            if (orderSearchHistory.isEmpty()) {
+                System.out.println("No more search history left to undo");
                 break;
-            }
-
-            boolean found = false;
-            for (int i = 0; i < availableBooks.getLibrarySize(); i++) {
-                Book book = availableBooks.getBook(i);
-                // Comparison
-                if (book.getTitle().toLowerCase().contains(inputBookTitle.toLowerCase())) {
-                    System.out.println("Found: " + book.toStockString()); // Display book details
-                    found = true;
-                }
-            }
-
-            if (!found) {
-                System.out.println("No books found matching: " + inputBookTitle);
             }
         }
     }

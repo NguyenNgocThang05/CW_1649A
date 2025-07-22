@@ -26,17 +26,9 @@ public class Search {
         return null; // Returns null if the order is not found
     }
 
-    public static Order searchOrderById(Order_List allOrders, int targetOrderID) {
-        Order foundOrder; // Initializes a variable to store the search result.
-
-        OrderQueue pendingOrders = allOrders.getPendingOrdersQueue(); // Gets the queue of pending orders.
-        foundOrder = binarySearch(pendingOrders, targetOrderID); // Performs binary search on the pending orders queue.
-
-        if (foundOrder == null) { // If the order was not found in the pending queue.
-            OrderQueue finishedOrders = allOrders.getFinishedOrdersQueue(); // Gets the queue of finished orders.
-            foundOrder = binarySearch(finishedOrders, targetOrderID); // Performs binary search on the finished orders queue.
-        }
-
-        return foundOrder; // Returns the order if found in either queue.
+    public static Order searchOrderById(Order_List allOrders, int targetOrderID){
+        // Retrieve the OrderQueue from Order_List
+        OrderQueue queue = allOrders.getAllOrders();
+        return binarySearch(queue, targetOrderID);
     }
 }
