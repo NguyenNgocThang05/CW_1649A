@@ -58,4 +58,8 @@ public class OrderList {
     public OrderQueue getAllOrders() {
         return this.allOrders;
     }
+
+    public boolean isEmpty() {
+        return this.allOrders.isEmpty();
+    }
 }
