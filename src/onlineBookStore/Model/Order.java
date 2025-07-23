@@ -76,7 +76,7 @@ public class Order {
 
     public String toString() {
         StringBuilder orderDetails = new StringBuilder(); // Creates a string builder called orderDetails
-        orderDetails.append("Order ID: ").append(orderID).append("\n"); // Appends the order ID and a new line
+        orderDetails.append("\nOrder ID: ").append(orderID).append("\n"); // Appends the order ID and a new line
         orderDetails.append(customer).append("\nBook(s) Ordered:\n"); // Appends the customer's toString() and "Books Ordered:"
 
         Sorting.insertionSortBook(books); // Sorts the books in the arraylist using insertion sort
