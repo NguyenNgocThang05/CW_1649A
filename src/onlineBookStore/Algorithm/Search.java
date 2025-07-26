@@ -18,7 +18,7 @@ public class Search {
         int right = orders.size() - 1;
 
         while (left <= right) {
-            int mid = left + right / 2;
+            int mid = left + (right - left) / 2;
             Order midOrder = orders.get(mid);
             int midOrderID = midOrder.getOrderID();
 
