@@ -1,23 +1,25 @@
 package onlineBookStore.Algorithm;
 
-import onlineBookStore.ADT.LinkedQueueADT;
+import onlineBookStore.ADT.ArrayListADT;
 import onlineBookStore.Helper_Functions.OrderList;
 import onlineBookStore.Model.Order;
 
 public class Search {
     public static Order searchOrderById(OrderList allOrders, int targetOrderID) {
-        LinkedQueueADT<Order> queue = allOrders.getAllOrders();
-        int size = queue.size();
+        // Validate input
+        if (allOrders == null || allOrders.isEmpty()) {
+            return null;
+        }
 
-        // Binary search on the queue
+        ArrayListADT<Order> orders = allOrders.getAllOrders();
+
+        // Binary search implementation
         int left = 0;
-        int right = size - 1;
+        int right = orders.size() - 1;
 
         while (left <= right) {
             int mid = left + right / 2;
-
-            // Get the middle element by traversing from head
-            Order midOrder = getOrderAt(queue, mid);
+            Order midOrder = orders.get(mid);
             int midOrderID = midOrder.getOrderID();
 
             if (midOrderID == targetOrderID) {
@@ -28,25 +30,7 @@ public class Search {
                 right = mid - 1;
             }
         }
+
         return null;
-    }
-
-    private static Order getOrderAt(LinkedQueueADT<Order> queue, int index) {
-        // Temporary queue to store dequeued elements
-        LinkedQueueADT<Order> tempQueue = new LinkedQueueADT<>();
-        Order result = null;
-
-        // Dequeue until we reach the desired index
-        for (int i = 0; i <= index; i++) {
-            result = queue.poll();
-            tempQueue.offer(result);
-        }
-
-        // Put all elements back in original queue
-        while (!tempQueue.isEmpty()) {
-            queue.offer(tempQueue.poll());
-        }
-
-        return result;
     }
 }

@@ -1,67 +1,77 @@
 package onlineBookStore.Helper_Functions;
 
-import onlineBookStore.ADT.LinkedQueueADT;
+import onlineBookStore.ADT.ArrayListADT;
 import onlineBookStore.Model.Order;
 import onlineBookStore.Model.OrderStatus;
 
 public class OrderList {
-    private final LinkedQueueADT<Order> allOrders;
+    private final ArrayListADT<Order> orders;
+    private int pendingCount;
 
     public OrderList() {
-        this.allOrders = new LinkedQueueADT<>();
+        this.orders = new ArrayListADT<>();
+        this.pendingCount = 0;
     }
 
-    public void addOrder(Order addOrder) {
-        if (addOrder == null) {
+    public void addOrder(Order newOrder) {
+        if (newOrder == null) {
             throw new IllegalArgumentException("Order cannot be null");
         }
 
-        addOrder.setStatus(OrderStatus.PENDING);
-        this.allOrders.offer(addOrder);
-        System.out.println("\nOrder " + addOrder.getOrderID() + " added to pending.");
+        newOrder.setStatus(OrderStatus.PENDING);
+        orders.add(newOrder);
+        pendingCount++;
+        System.out.printf("\nOrder %d added to pending orders. (%d pending)%n",
+                newOrder.getOrderID(), pendingCount);
     }
 
-    public void finishOrder() {
-        if (this.allOrders.isEmpty()) {
-            System.out.println("No orders to complete.");
-            return;
-        }
-
-        Order oldestOrder = this.allOrders.peek();
-
-        if (oldestOrder.getStatus() == OrderStatus.COMPLETE) {
+    public Order finishOrder() {
+        if (pendingCount == 0) {
             System.out.println("No pending orders to complete.");
-            return;
+            return null;
         }
 
-        oldestOrder.markAsComplete();
-        Order completedOrder = this.allOrders.poll();
-        this.allOrders.offer(completedOrder);
-        System.out.println("Completed order: " + completedOrder.getOrderID());
+        // Find the oldest pending order
+        for (int i = 0; i < orders.size(); i++) {
+            Order order = orders.get(i);
+            if (order.getStatus() == OrderStatus.PENDING) {
+                order.markAsComplete();
+                pendingCount--;
+                System.out.printf("Completed order: %d (%d remaining pending)%n",
+                        order.getOrderID(), pendingCount);
+                return order;
+            }
+        }
+
+        System.out.println("No pending orders found (inconsistent state).");
+        return null;
     }
 
     public void showOrderStatus() {
-        if (this.allOrders.isEmpty()) {
+        if (orders.isEmpty()) {
             System.out.println("No orders to display.");
             return;
         }
 
-        System.out.println("\nOrder Status:");
-        int size = allOrders.size();
-        for (int i = 0; i < size; i++) {
-            Order order = allOrders.poll();
-            System.out.println("Order: " + order.getOrderID() + " | " +
-                    "Customer: " + order.getCustomer().getName() + " | " +
-                    "Status: " + order.getStatus());
-            allOrders.offer(order);
+        System.out.println("\nOrder Status Summary:");
+        System.out.printf("Total orders: %d (Pending: %d, Completed: %d)%n",
+                orders.size(), pendingCount, orders.size() - pendingCount);
+
+        for (int i = 0; i < orders.size(); i++) {
+            Order order = orders.get(i);
+            System.out.printf("%d. Order ID: %d | Customer: %s | Status: %s%n",
+                    i + 1,
+                    order.getOrderID(),
+                    order.getCustomer().getName(),
+                    order.getStatus());
         }
     }
 
-    public LinkedQueueADT<Order> getAllOrders() {
-        return this.allOrders;
+    public ArrayListADT<Order> getAllOrders() {
+        return orders;
     }
 
     public boolean isEmpty() {
-        return this.allOrders.isEmpty();
+        return orders.isEmpty();
     }
 }
