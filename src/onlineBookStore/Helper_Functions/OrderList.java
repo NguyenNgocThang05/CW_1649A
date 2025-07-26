@@ -1,20 +1,24 @@
 package onlineBookStore.Helper_Functions;
 
-import onlineBookStore.ADT.OrderQueue;
+import onlineBookStore.ADT.LinkedQueueADT;
 import onlineBookStore.Model.Order;
 import onlineBookStore.Model.OrderStatus;
 
 public class OrderList {
-    private final OrderQueue allOrders; // Declares an OrderQueue to manage pending orders.
+    private final LinkedQueueADT<Order> allOrders;
 
     public OrderList() {
-        this.allOrders = new OrderQueue();
+        this.allOrders = new LinkedQueueADT<>();
     }
 
     public void addOrder(Order addOrder) {
-        addOrder.setStatus(OrderStatus.PENDING); // Adds the new order to the pending queue's internal ArrayListADT.
-        this.allOrders.enqueue(addOrder);
-        System.out.println("\nOrder " + addOrder.getOrderID() + " added to pending."); // Confirms the order has been added.
+        if (addOrder == null) {
+            throw new IllegalArgumentException("Order cannot be null");
+        }
+
+        addOrder.setStatus(OrderStatus.PENDING);
+        this.allOrders.offer(addOrder);
+        System.out.println("\nOrder " + addOrder.getOrderID() + " added to pending.");
     }
 
     public void finishOrder() {
@@ -23,7 +27,6 @@ public class OrderList {
             return;
         }
 
-        // Get the oldest order (front of queue)
         Order oldestOrder = this.allOrders.peek();
 
         if (oldestOrder.getStatus() == OrderStatus.COMPLETE) {
@@ -31,12 +34,9 @@ public class OrderList {
             return;
         }
 
-        // Mark as complete and dequeue
         oldestOrder.markAsComplete();
-        Order completedOrder = this.allOrders.dequeue();
-
-        // Re-enqueue to keep in system
-        this.allOrders.enqueue(completedOrder);
+        Order completedOrder = this.allOrders.poll();
+        this.allOrders.offer(completedOrder);
         System.out.println("Completed order: " + completedOrder.getOrderID());
     }
 
@@ -47,15 +47,17 @@ public class OrderList {
         }
 
         System.out.println("\nOrder Status:");
-        for (int i = 0; i < allOrders.size(); i++) {
-            Order order = allOrders.get(i);
+        int size = allOrders.size();
+        for (int i = 0; i < size; i++) {
+            Order order = allOrders.poll();
             System.out.println("Order: " + order.getOrderID() + " | " +
-                                "Customer: " + order.getCustomer().getName() + " | " +
-                                "Status: " + order.getStatus());
+                    "Customer: " + order.getCustomer().getName() + " | " +
+                    "Status: " + order.getStatus());
+            allOrders.offer(order);
         }
     }
 
-    public OrderQueue getAllOrders() {
+    public LinkedQueueADT<Order> getAllOrders() {
         return this.allOrders;
     }
 

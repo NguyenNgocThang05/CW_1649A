@@ -154,6 +154,7 @@ public class MenuManager {
     }
 
     public static void handleSearchHistory (Scanner scanner, LinkedStackADT<Order> orderSearchHistory) {
+        // If no searches was made
         if (orderSearchHistory.isEmpty()) {
             System.out.println("\nNo search history found.");
             return;
@@ -169,24 +170,24 @@ public class MenuManager {
 
             switch (input) {
                 case "1":
-                    Order undoSearch = orderSearchHistory.pop();
+                    Order undoSearch = orderSearchHistory.pop();    // Pops the most recently search order to undo
                     System.out.println("\nUndid search for Order ID: " + undoSearch.getOrderID());
                     break;
 
                 case "2":
                     System.out.println("\nAll search history:");
-                    System.out.println(orderSearchHistory);
+                    System.out.println(orderSearchHistory);   // Prints all searched orders
                     break;
 
                 case "3":
-                    return;
+                    return; // returns back to the main menu
 
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
 
             if (orderSearchHistory.isEmpty()) {
-                System.out.println("No more search history left to undo");
+                System.out.println("No more search history left to undo");  // Tells the user no more undo can be done
                 break;
             }
         }
