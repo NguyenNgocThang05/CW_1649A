@@ -1,7 +1,5 @@
 package onlineBookStore.ADT;
 
-import onlineBookStore.Model.Order; // Imports the Order class for type safety within the queue.
-
 public class LinkedQueueADT<E> {
     private class Node<E> {
         // data
